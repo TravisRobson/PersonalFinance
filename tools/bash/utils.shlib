@@ -1,2 +1,21 @@
 
 
+function red() {
+  echo "$(tput setaf 1)" 
+}
+
+
+function green() {
+  echo "$(tput setaf 2)"
+}
+
+
+function bold() {
+  echo "$(tput bold)"
+}
+
+
+function reset() {
+  echo "$(tput sgr0)" 
+}
+
