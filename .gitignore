@@ -36,5 +36,6 @@
 build
 bin
 lib
+include
 __pycache__
 Finance.egg-info/
