@@ -48,7 +48,7 @@ cmd="${cmd} -DCMAKE_INSTALL_PREFIX=${installPrefix}"
 cmd="${cmd} .."
 
 
-mkdir -p build lib bin
+mkdir -p build # lib bin
 
 cd build
 
