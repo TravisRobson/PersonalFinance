@@ -4,7 +4,8 @@ cmake_minimum_required( VERSION 3.8.0 FATAL_ERROR )
 project( finance VERSION 0.1.0 )
 
 
-set( CMAKE_CXX_STANDARD 11 )
+set( CMAKE_CXX_STANDARD 17 )
+
 
 set( FINANCE_MAJOR_VERSION 0 )
 set( FINANCE_MINOR_VERSION 1 )
@@ -50,6 +51,37 @@ endforeach()
 # Google Tests
 #
 if ( GOOGLE_TEST )
+
+  include( CTest )
+  include( ExternalProject )
+
+  # Set default ExternalProject root directory
+  set_directory_properties( PROPERTIES EP_PREFIX ${CMAKE_BINARY_DIR}/extern )
+
+  ExternalProject_Add( googletest
+    GIT_REPOSITORY     https://github.com/google/googletest.git
+    GIT_TAG            release-1.10.0
+    # Disable install step
+    INSTALL_COMMAND    ""
+    TIMEOUT            10
+    # force separate output paths for debug and release buils to allow easy
+    # identification of correct lib in subsequest TARGET_LINK_LIBRARIES commands
+    CMAKE_ARGS         -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+                       -DCMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG:PATH=DebugLibs
+                       -DCMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE:PATH=ReleaseLibs
+                       -Dgtest_force_shared_crt=ON
+                       #-DCMAKE_CXX_FLAGS=-Wc++11-extensions
+    # Wrap download, configure, and build steps in a script to log output
+    LOG_DOWNLOAD       ON
+    LOG_CONFIGURE      ON
+    LOG_BUILD          ON
+  )
+
+  # Specify include dir
+  ExternalProject_Get_Property( googletest source_dir )
+  include_directories( ${source_dir}/googletest/include )
+
+  enable_testing()
 
 endif()
 

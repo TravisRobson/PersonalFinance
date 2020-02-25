@@ -1,6 +1,7 @@
 import click
 import os
 import subprocess 
+import ast
 
 
 def cdToRoot( config ):
@@ -28,20 +29,28 @@ def cli( config ):
   config.verbose = True
 
 
-@cli.command()
-@click.option( '--build-type', 
-               default='Debug',
-               help='Configure build type. Options: Debug, Release',
-               show_default=True
-)
-@click.option( '--verbose', is_flag=True )
+@cli.command() 
+@click.option( '-gt', '--google-test', is_flag=True, default=False )
+@click.option( '-h', '--help', is_flag=True, default=False )
 @passConfig
-def configure( config, build_type, verbose ):
+def configure( config, google_test, help ): 
   """
   Configure this project's build
-  """
+  """  
+  lst = [ './tools/bash/configure.sh' ]
+
+  #
+  # Append configuration options
+  #
+  if google_test:
+    lst.extend( [ '--google-test' ] )
+
+  if help:
+    lst.extend( [ '--help' ] )
+
+
   cdToRoot( config )
-  subprocess.call( [ './tools/bash/configure.sh' ] )
+  subprocess.call( lst )
 
 
 
