@@ -26,6 +26,8 @@ public:
   Money& operator+=( const Money& money );
   //Money operator+( const Money& money );
 
+  bool operator==( const Money& rhs ) const;
+
   int dollars() const { return dollars_; }
   int cents()   const { return cents_;   }
 

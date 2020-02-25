@@ -29,6 +29,18 @@ Money& Money::operator+=( const Money& money )
 }
 
 
+bool Money::operator==( const Money& rhs ) const
+{
+
+  bool dollarsEqual = dollars() == rhs.dollars();
+  bool centsEqual   = cents() == rhs.cents();
+
+  if ( dollarsEqual == centsEqual ) { return true; }
+  else { return false; }
+
+}
+
+
 
 // Money Money::operator+( const Money& money )
 // {
