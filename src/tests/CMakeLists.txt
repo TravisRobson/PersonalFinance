@@ -19,4 +19,4 @@ target_link_libraries(
   finance
 )
 
-install( TARGETS MoneyTests RUNTIME DESTINATION ${INSTALL_BIN_DIR} )
+install( TARGETS MoneyTests RUNTIME DESTINATION ${INSTALL_BIN_DIR}/tests )

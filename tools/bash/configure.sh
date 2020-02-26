@@ -29,9 +29,9 @@ function usage()
   echo "$ ./configure <options>"
   echo "--------------------------------------------------------------------------------"
   echo "  -gt, --google-test       build Google tests"
-  echo "  -gd, --gtest-dir         Google test directory"
   echo "  -h,  --help              display this usage message"
   echo "  -i,  --install-prefix    installation prefix"
+  echo "  -vb, --verbose-build     build commands will be displayed verbosely"
   echo ""
 
 }
@@ -43,6 +43,7 @@ function usage()
 buildType="Debug"
 installPrefix="${root}"
 googleTest="OFF"
+verboseBuild="OFF"
 
 
 #
@@ -61,6 +62,10 @@ while [[ $# -gt 0 ]]; do
     -h|--help)
     usage
     exit 0
+    ;;
+
+    -vb|--verbose-build)
+    verboseBuild="ON"
     ;;
 
     *) # unknown argument
@@ -85,6 +90,7 @@ cmd="${cmd} -G \"Unix Makefiles\""
 cmd="${cmd} -DCMAKE_BUILD_TYPE=${buildType}"
 cmd="${cmd} -DCMAKE_INSTALL_PREFIX=${installPrefix}"
 cmd="${cmd} -DGOOGLE_TEST=${googleTest}"
+cmd="${cmd} -DCMAKE_VERBOSE_MAKEFILE:BOOL=${verboseBuild}"
 cmd="${cmd} .."
 
 

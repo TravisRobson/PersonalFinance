@@ -7,5 +7,15 @@
 #include "gtest/gtest.h"
 
 
+class MoneyTests
+  : public ::testing::Test
+{
+
+protected:
+
+  MoneyTests() {}
+  ~MoneyTests() {}
+
+};
 
 #endif
