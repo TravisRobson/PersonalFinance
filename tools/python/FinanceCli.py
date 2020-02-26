@@ -32,8 +32,9 @@ def cli( config ):
 @cli.command() 
 @click.option( '-gt', '--google-test', is_flag=True, default=False )
 @click.option( '-h', '--help', is_flag=True, default=False )
+@click.option( '-vb', '--verbose-build', is_flag=True, default=False )
 @passConfig
-def configure( config, google_test, help ): 
+def configure( config, google_test, help, verbose_build ): 
   """
   Configure this project's build
   """  
@@ -48,6 +49,8 @@ def configure( config, google_test, help ):
   if help:
     lst.extend( [ '--help' ] )
 
+  if verbose_build:
+    lst.extend( [ '--verbose-build' ] )
 
   cdToRoot( config )
   subprocess.call( lst )

@@ -2,20 +2,57 @@
 
 #include "Money.hpp"
 
-#include <string>
+#include <cmath>
+#include <stdexcept>
 
 using namespace std;
 
 
-Money::Money( string amount )
+///////////////////////////////////////////////////////////////////////////////
+/// \brief  The basic money constructor
+///
+/// Constructor assumes dollars and cents are of the same sign, otherwise 
+/// throws.
+///
+/// \author  Travis Robson
+///////////////////////////////////////////////////////////////////////////////
+Money::Money( int dollars, int cents )
+  : dollars_( dollars ), cents_( cents )
 {
+
+  bool dollarPositiveCentsNegative = ( dollars < 0 && cents > 0 );
+  bool dollarNegativeCentsPositive = ( dollars > 0 && cents < 0 );
+
+  if ( dollarPositiveCentsNegative || dollarNegativeCentsPositive ) {
+    throw runtime_error( "Signs of dollars and cents in Money constructor must match" );
+  }
 
 }
 
 
-Money::Money( int dollars, int cents )
-  : dollars_( dollars ), cents_( cents )
-{}
+Money::Money( double amount )
+  : dollars_( 0 ), cents_( 0 )
+{
+
+  bool positive = ( amount > 0.0 );
+
+  amount = abs( amount );
+
+  double fractionOfDollar = amount - floor( amount );
+  fractionOfDollar        = round( centsInDollar * fractionOfDollar ); // e.g. $0.305 * 100 = 30.5 --> 31 
+  int cents               = static_cast< int >( fractionOfDollar );
+  int dollars             = static_cast< int >( amount - 1.0 * cents / centsInDollar );
+
+  if ( !positive ) {
+
+    cents   *= -1;
+    dollars *= -1;
+
+  }
+
+  new (this) Money( dollars, cents );
+
+}
 
 
 Money& Money::operator+=( const Money& money )
@@ -24,7 +61,24 @@ Money& Money::operator+=( const Money& money )
   dollars_ += money.dollars();
   cents_   += money.cents();
 
+  bool centsGreaterThanDollar = ( cents_ > centsInDollar );
+  if ( centsGreaterThanDollar ) {
+    dollars_ += 1;
+    cents_   -= centsInDollar;
+  }
+
   return *this;
+
+}
+
+
+Money Money::operator+( const Money& money ) const
+{
+
+
+  Money m( this->dollars(), this->cents() );
+  m += money;
+  return money;
 
 }
 
@@ -42,10 +96,3 @@ bool Money::operator==( const Money& rhs ) const
 
 
 
-// Money Money::operator+( const Money& money )
-// {
-
-//   dollars_ += money.dollars();
-//   cents_   += money.cents();
-
-// }
