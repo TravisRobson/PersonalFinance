@@ -3,6 +3,7 @@
 #include "Money.hpp"
 
 #include <cmath>
+#include <iostream>
 #include <stdexcept>
 
 using namespace std;
@@ -20,6 +21,7 @@ Money::Money( int dollars, int cents )
   : dollars_( dollars ), cents_( cents )
 {
 
+  /// \todo How to handle dollars or cents being zero. We would prefer not to put a minux sign on a zero
   bool dollarPositiveCentsNegative = ( dollars < 0 && cents > 0 );
   bool dollarNegativeCentsPositive = ( dollars > 0 && cents < 0 );
 
@@ -76,8 +78,43 @@ Money Money::operator+( const Money& money ) const
 {
 
 
-  Money m( this->dollars(), this->cents() );
+  Money m( *this );
   m += money;
+
+  return money;
+
+}
+
+
+Money& Money::operator-=( const Money& money )
+{
+
+  std::cout << *this << "\n";
+
+  dollars_ -= money.dollars();
+  cents_   -= money.cents();
+
+  std::cout << *this << "\n";
+
+  bool centsGreaterThanDollar = ( cents_ > centsInDollar );
+  if ( centsGreaterThanDollar ) {
+    dollars_ += 1;
+    cents_   -= centsInDollar;
+  }
+
+  return *this;
+
+}
+
+
+Money Money::operator-( const Money& money ) const
+{
+
+  Money m( *this );
+  m -= money;
+
+  std::cout << "dollars: " << m << "\n";
+
   return money;
 
 }

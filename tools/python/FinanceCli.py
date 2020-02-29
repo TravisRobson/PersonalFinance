@@ -6,7 +6,7 @@ import ast
 
 def cdToRoot( config ):
 
-  subprocess.run( [ 'cd', config.root ] )
+  subprocess.call( [ 'cd', config.root ] )
 
 
 class Config:
@@ -93,9 +93,8 @@ def openDoxygen( config ):
   """
   Open HTML Doxygen-generated documentation for this project
   """
-
   cdToRoot( config )
-  subprocess.run( [ 'open', 'docs/html/index.html' ] )
+  subprocess.call( [ 'open', 'docs/html/index.html' ] )
 
 
 

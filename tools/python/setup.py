@@ -4,7 +4,7 @@ from setuptools import setup
 
 
 setup(
-  name = 'Finance',
+  name = 'PersonalFinance',
   version = 0.1, 
   py_modules = [ 'FinanceCli' ],
   install_requires = [
@@ -12,6 +12,6 @@ setup(
   ],
   entry_points = '''
     [console_scripts]
-    Finance=FinanceCli:cli
+    pf=FinanceCli:cli
   '''
 )
