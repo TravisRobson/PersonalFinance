@@ -9,6 +9,7 @@
 
 
 using namespace std;
+using namespace pfin;
 
 
 TEST( MoneyTests, OnePlusOneEqualsTwo )

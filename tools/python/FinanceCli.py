@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import click
 import os
 import subprocess 
@@ -85,6 +87,18 @@ def install( config ):
   """
   cdToRoot( config )
   subprocess.call( [ './tools/bash/install.sh' ] )
+
+
+@cli.command()
+@passConfig
+@click.pass_context
+def bi( context, config ):
+  """
+  Build and install
+  """
+  context.invoke( build   )
+  context.invoke( install )
+
 
 
 @cli.command()

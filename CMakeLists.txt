@@ -4,7 +4,7 @@ cmake_minimum_required( VERSION 3.8.0 FATAL_ERROR )
 project( finance VERSION 0.1.0 )
 
 
-set( CMAKE_CXX_STANDARD 17 )
+set( CMAKE_CXX_STANDARD 11 )
 
 
 set( FINANCE_MAJOR_VERSION 0 )

@@ -6,7 +6,11 @@
 #include <iostream>
 #include <stdexcept>
 
+
 using namespace std;
+
+
+namespace pfin {
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -22,12 +26,8 @@ Money::Money( int dollars, int cents )
 {
 
   /// \todo How to handle dollars or cents being zero. We would prefer not to put a minux sign on a zero
-  bool dollarPositiveCentsNegative = ( dollars < 0 && cents > 0 );
-  bool dollarNegativeCentsPositive = ( dollars > 0 && cents < 0 );
-
-  if ( dollarPositiveCentsNegative || dollarNegativeCentsPositive ) {
-    throw runtime_error( "Signs of dollars and cents in Money constructor must match" );
-  }
+  assert( ( dollars < 0 && cents > 0 ) && "Dollars and cents must be of the same sign." );
+  assert( ( dollars > 0 && cents < 0 ) && "Dollars and cents must be of the same sign." );
 
 }
 
@@ -131,5 +131,7 @@ bool Money::operator==( const Money& rhs ) const
 
 }
 
+
+}
 
 

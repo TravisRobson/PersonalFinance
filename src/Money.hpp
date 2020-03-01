@@ -7,7 +7,10 @@
 #include <iostream>
 
 
-using namespace std;
+using std::ostream;
+
+
+namespace pfin {
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -17,6 +20,8 @@ using namespace std;
 ///////////////////////////////////////////////////////////////////////////////
 class Money
 {
+
+  int dollars_, cents_;
 
 public:
 
@@ -40,11 +45,7 @@ public:
 
   friend ostream& operator<<( ostream& os, const Money& money );
 
-
 private:
-
-  int dollars_;
-  int cents_;
 
   static constexpr int centsInDollar { 100 };
 
@@ -55,14 +56,14 @@ private:
 ostream& operator<<( ostream& os, const Money& money )
 {
 
-  // os.imbue( locale( "en_US.utf8" ) ); /// \todo This fails for some reason. OS issue?
+  // os.imbue( locale( "en_US.utf8" ) ); /// \todo This fails for some reason. OSX issue?
 
   if ( money.dollars() < 0.0 ) { os << "-"; }
 
   os << money.dollars() << ".";
 
   if ( money.cents() < 10 ) { os << "0"; }
-  
+
   os << money.cents();
 
   return os;
@@ -70,5 +71,8 @@ ostream& operator<<( ostream& os, const Money& money )
 }
 
 
+}
+
 
 #endif
+
