@@ -12,10 +12,13 @@ $ pip install --editable .
 ```
 in order to install the developer command-line interface (CLI). You might want to add the line
 ```bash
-"$(_FINANCEC_COMPLETE=source Finance)"
+"$(_PF_COMPLETE=source pf)"
 ```
-to your `~/.bashrc` or `~/.bash_profile`.
+to your `~/.bashrc` or `~/.bash_profile`. For example you may configure the build by the call
 
+```bash
+pf configure
+```
 
 Move back to this projects root folder. 
 
@@ -32,6 +35,6 @@ configuration options by `Finance configure --help`.
 
 
 
-## Notes
+## Personal Notes
 
 I need to fully digest this [reference](https://gitlab.kitware.com/cmake/community/-/wikis/doc/tutorials/How-to-create-a-ProjectConfig.cmake-file)

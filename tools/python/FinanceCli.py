@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import click
 import os
 import subprocess 
@@ -6,7 +8,7 @@ import ast
 
 def cdToRoot( config ):
 
-  subprocess.run( [ 'cd', config.root ] )
+  subprocess.call( [ 'cd', config.root ] )
 
 
 class Config:
@@ -89,13 +91,24 @@ def install( config ):
 
 @cli.command()
 @passConfig
+@click.pass_context
+def bi( context, config ):
+  """
+  Build and install
+  """
+  context.invoke( build   )
+  context.invoke( install )
+
+
+
+@cli.command()
+@passConfig
 def openDoxygen( config ):
   """
   Open HTML Doxygen-generated documentation for this project
   """
-
   cdToRoot( config )
-  subprocess.run( [ 'open', 'docs/html/index.html' ] )
+  subprocess.call( [ 'open', 'docs/html/index.html' ] )
 
 
 
