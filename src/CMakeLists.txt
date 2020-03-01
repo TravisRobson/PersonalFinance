@@ -1,19 +1,19 @@
 
 
-configure_file( config.hpp.in "${CMAKE_CURRENT_BINARY_DIR}/config.hpp" @ONLY )
+#configure_file( config.hpp.in "${CMAKE_CURRENT_BINARY_DIR}/config.hpp" @ONLY )
 
 
 add_library( 
   finance SHARED
   Money.cpp
-  Money.hpp
-  config.hpp
+  Loan.cpp
+  #config.hpp
 )
 set_target_properties(
   finance PROPERTIES
   SOVERSION 0
   VERSION ${CMAKE_PROJECT_VERSION}
-  PUBLIC_HEADER "Money.hpp;${CMAKE_CURRENT_BINARY_DIR}/config.hpp"
+  PUBLIC_HEADER "Money.hpp;" #${CMAKE_CURRENT_BINARY_DIR}/config.hpp"
 )
 target_include_directories( finance PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} )
 
