@@ -25,13 +25,12 @@ Money::Money( int dollars, int cents )
   : dollars_( dollars ), cents_( cents )
 {
 
-  /// \todo How to handle dollars or cents being zero. We would prefer not to put a minux sign on a zero
-  assert( ( dollars < 0 && cents > 0 ) && "Dollars and cents must be of the same sign." );
-  assert( ( dollars > 0 && cents < 0 ) && "Dollars and cents must be of the same sign." );
+  assert( ( ( dollars >= 0 && cents >= 0 ) || ( dollars <= 0 && cents <= 0 )  ) && "Dollars and cents must be of the same sign." );
 
 }
 
 
+/// \todo seems more complicated than necessary
 Money::Money( double amount )
   : dollars_( 0 ), cents_( 0 )
 {
@@ -57,31 +56,101 @@ Money::Money( double amount )
 }
 
 
+bool operator==( const Money& a, const Money& b )
+{
+
+  bool dollarsEqual = ( a.dollars() == a.dollars() );
+  bool centsEqual   = ( a.cents()   == b.cents()   );
+
+  if ( dollarsEqual && centsEqual ) { return true; }
+  else { return false; }
+
+}
+
+bool operator!=( const Money& a, const Money& b )
+{
+  return !( a == b );
+}
+
+
+bool operator<( const Money& a, const Money& b )
+{
+
+  double aTotal{ a.toDouble() };
+  double bTotal{ b.toDouble() };
+
+  if ( aTotal < bTotal ) { return true; }
+  else { return false; }
+
+}
+
+
+bool operator>( const Money& a, const Money& b )
+{
+
+  double aTotal{ a.toDouble() };
+  double bTotal{ b.toDouble() };
+
+  if ( aTotal > bTotal ) { return true; }
+  else { return false; }
+
+}
+
+
+bool operator<=( const Money& a, const Money& b )
+{
+
+  return ( ( a < b ) || ( a == b ) );
+
+}
+
+
+bool operator>=( const Money& a, const Money& b )
+{
+
+  return ( ( a > b ) || ( a == b ) );
+
+}
+
+
+
+
 Money& Money::operator+=( const Money& money )
 {
 
   dollars_ += money.dollars();
   cents_   += money.cents();
 
-  bool centsGreaterThanDollar = ( cents_ > centsInDollar );
-  if ( centsGreaterThanDollar ) {
-    dollars_ += 1;
-    cents_   -= centsInDollar;
-  }
+  rollOverCents();
 
   return *this;
 
 }
 
 
-Money Money::operator+( const Money& money ) const
+/// \todo seems more complicated than necessary
+
+void Money::rollOverCents()
 {
 
+  bool centsGreaterThanDollar = ( abs( cents_ ) >= centsInDollar );
 
-  Money m( *this );
-  m += money;
+  if ( centsGreaterThanDollar ) {
 
-  return money;
+    if ( cents_ >= 0 || dollars_ >= 0 ) {
+
+      dollars_ += 1;
+      cents_   -= centsInDollar;
+
+    }
+    else {
+
+      dollars_ -= 1;
+      cents_   += centsInDollar;   
+
+    }
+
+  }
 
 }
 
@@ -89,47 +158,45 @@ Money Money::operator+( const Money& money ) const
 Money& Money::operator-=( const Money& money )
 {
 
-  std::cout << *this << "\n";
-
-  dollars_ -= money.dollars();
-  cents_   -= money.cents();
-
-  std::cout << *this << "\n";
-
-  bool centsGreaterThanDollar = ( cents_ > centsInDollar );
-  if ( centsGreaterThanDollar ) {
-    dollars_ += 1;
-    cents_   -= centsInDollar;
-  }
+  Money negate( -money.dollars(), -money.cents() );
+  *this += negate;
 
   return *this;
 
 }
 
 
-Money Money::operator-( const Money& money ) const
+Money& Money::operator*=( const double multiplier )
 {
 
-  Money m( *this );
-  m -= money;
+  cents_   *= multiplier;
+  dollars_ *= multiplier;
 
-  std::cout << "dollars: " << m << "\n";
+  rollOverCents();
 
-  return money;
+  return *this;
 
 }
 
 
-bool Money::operator==( const Money& rhs ) const
+Money& Money::operator/=( const double divisor )
 {
 
-  bool dollarsEqual = dollars() == rhs.dollars();
-  bool centsEqual   = cents() == rhs.cents();
+  double cents   = cents_;
+  double dollars = dollars_;
 
-  if ( dollarsEqual == centsEqual ) { return true; }
-  else { return false; }
+  double amount  = dollars_ + cents / centsInDollar ;
+
+  amount /= divisor;
+
+  *this = Money( amount );
+
+  return  *this;
 
 }
+
+
+
 
 
 }
