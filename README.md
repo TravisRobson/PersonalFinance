@@ -5,7 +5,7 @@ This projects's goal is to automate my personal financial calcuations.
 
 ## Getting Started as a developer
 
-To begin first navigate to `tools/bash` and type
+To begin first navigate to `tools/python` and type
 
 ```bash
 $ pip install --editable .

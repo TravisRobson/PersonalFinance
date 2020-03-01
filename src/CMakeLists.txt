@@ -17,6 +17,8 @@ set_target_properties(
 )
 target_include_directories( finance PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} )
 
+target_compile_definitions( -Wall -Wextra )
+
 install( 
   TARGETS finance 
   # add finance library to the "export set"
