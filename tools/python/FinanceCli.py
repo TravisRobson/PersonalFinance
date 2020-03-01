@@ -6,6 +6,29 @@ import subprocess
 import ast
 
 
+class AliasedGroup( click.Group ):
+  """
+  This function was taken from Click themselves
+  http://click.palletsprojects.com/en/5.x/advanced/
+  """
+  def get_command( self, ctx, cmd_name ):
+
+    rv = click.Group.get_command(self, ctx, cmd_name)
+    
+    if rv is not None:
+      return rv
+
+    matches = [x for x in self.list_commands(ctx)
+               if x.startswith(cmd_name)]
+    if not matches:
+      return None
+
+    elif len(matches) == 1:
+      return click.Group.get_command( self, ctx, matches[0] )
+
+    ctx.fail('Too many matches: %s' % ', '.join(sorted(matches)))
+
+
 def cdToRoot( config ):
 
   subprocess.call( [ 'cd', config.root ] )
@@ -22,7 +45,7 @@ passConfig = click.make_pass_decorator( Config, ensure=True )
 
 
 
-@click.group()
+@click.group( cls=AliasedGroup )
 @passConfig
 def cli( config ):
   """
@@ -31,12 +54,15 @@ def cli( config ):
   config.verbose = True
 
 
+
+
 @cli.command() 
 @click.option( '-gt', '--google-test', is_flag=True, default=False )
 @click.option( '-h', '--help', is_flag=True, default=False )
+@click.option( '-nw', '--no-warnings', is_flag=True, default=False )
 @click.option( '-vb', '--verbose-build', is_flag=True, default=False )
 @passConfig
-def configure( config, google_test, help, verbose_build ): 
+def configure( config, google_test, help, no_warnings, verbose_build ): 
   """
   Configure this project's build
   """  
@@ -50,6 +76,9 @@ def configure( config, google_test, help, verbose_build ):
 
   if help:
     lst.extend( [ '--help' ] )
+
+  if no_warnings:
+    lst.extend( [ '--no-warnings' ] )
 
   if verbose_build:
     lst.extend( [ '--verbose-build' ] )
@@ -101,7 +130,7 @@ def bi( context, config ):
 
 
 
-@cli.command()
+@cli.command( cls=AliasedGroup )
 @passConfig
 def openDoxygen( config ):
   """

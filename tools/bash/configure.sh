@@ -31,6 +31,7 @@ function usage()
   echo "  -gt, --google-test       build Google tests"
   echo "  -h,  --help              display this usage message"
   echo "  -i,  --install-prefix    installation prefix"
+  echo "  -nw, --no-warnings       build without compiler warnings"
   echo "  -vb, --verbose-build     build commands will be displayed verbosely"
   echo ""
 
@@ -44,6 +45,7 @@ buildType="Debug"
 installPrefix="${root}"
 googleTest="OFF"
 verboseBuild="OFF"
+compilerWarnings="ON"
 
 
 #
@@ -62,6 +64,10 @@ while [[ $# -gt 0 ]]; do
     -h|--help)
     usage
     exit 0
+    ;;
+
+    -nw|--no-warnings)
+    compilerWarnings="OFF"
     ;;
 
     -vb|--verbose-build)
@@ -91,6 +97,7 @@ cmd="${cmd} -DCMAKE_BUILD_TYPE=${buildType}"
 cmd="${cmd} -DCMAKE_INSTALL_PREFIX=${installPrefix}"
 cmd="${cmd} -DGOOGLE_TEST=${googleTest}"
 cmd="${cmd} -DCMAKE_VERBOSE_MAKEFILE:BOOL=${verboseBuild}"
+cmd="${cmd} -DCOMPILER_WARNINGS=${compilerWarnings}"
 cmd="${cmd} .."
 
 

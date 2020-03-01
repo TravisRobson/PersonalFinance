@@ -1,0 +1,47 @@
+# - Config file for the Finance package
+# It defines the following variables
+#  Finance_INCLUDE_DIRS - include directories for Finance
+#  Finance_LIBRARIES    - libraries to link against
+#  Finance_EXECUTABLE   - the main executable
+# 
+
+
+get_filename_component( PERSONALFINANCE_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH )
+include( CMakeFindDependencyMacro )
+
+list( APPEND CMAKE_MODULE_PATH PERSONALFINANCE_CMAKE_DIR )
+
+
+if( NOT TARGET PersonalFinance::PersonalFinance )
+
+  include( "${PERSONALFINANCE_CMAKE_DIR}/PersonalFinanceTargets.cmake" )
+
+endif()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+############## OLD stuff after get_filename_component
+#set( FINANCE_INCLUDE_DIRS "@CONF_INCLUDE_DIRS@" )
+
+
+# Our library dependencies (contains definitions for IMPORTED targets)
+# if(NOT TARGET foo AND NOT Finance_BINARY_DIR)
+#   include("${FINANCE_CMAKE_DIR}/FinanceTargets.cmake")
+# endif()
+
+# # These are IMPORTED targets created by FinanceTargets.cmake
+# set( FINANCE_LIBRARIES  src  )
+# set( FINANCE_EXECUTABLE apps )

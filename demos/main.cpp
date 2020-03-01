@@ -7,6 +7,8 @@
 #include <sstream>
 #include <stdexcept>
 
+#include "Money.hpp"
+
 
 using std::cout;
 using std::cerr;
@@ -43,6 +45,9 @@ void run( int argc, char* argv[] )
 
   cout << "Welcome!\n";
   parseCommandLineArgs( argc, argv );
+
+  Money m( 1.00 );
+  std::cout << "Money--$" << m << "\n";
 
 }
 
