@@ -3,6 +3,17 @@
 
 This projects's goal is to automate my personal financial calcuations.
 
+## For library users
+
+You may now use this library by adding 
+
+```cmake
+find_package( PersonalFinance 0.1 REQUIRED )
+target_link_libraries( <target> PersonalFinance::PersonalFinance )
+```
+to your target's `CMakeLists.txt`. If you install the `PersonalFinance` library with the appropriate prefix, you will 
+simply need to run cmake with the flag: `-DPersonalFinance_DIR=lib/cmake/personalFinance`.
+
 ## Getting Started as a developer
 
 To begin first navigate to `tools/python` and type

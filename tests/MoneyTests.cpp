@@ -5,11 +5,9 @@
 #include <iostream>
 #include <stdexcept>
 
-#include "Money.hpp"
-
 
 using namespace std;
-using namespace pfin;
+using namespace fin;
 
 
 ///////////////////////////////////////////////////////////////////////////////

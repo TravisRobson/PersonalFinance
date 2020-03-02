@@ -31,11 +31,13 @@
 *.out
 *.app
 
+# python files
+*.pyc
 
 #folders
 build
 bin
 lib
-include
+demos/include
 __pycache__
 PersonalFinance.egg-info/
