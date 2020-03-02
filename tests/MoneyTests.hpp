@@ -4,12 +4,12 @@
 #define MoneyTests_hpp
 
 
-#include "Money.hpp"
+#include "personalFinance/Money.hpp"
 
 #include "gtest/gtest.h"
 
 
-using namespace pfin;
+using namespace fin;
 
 
 ///////////////////////////////////////////////////////////////////////////////

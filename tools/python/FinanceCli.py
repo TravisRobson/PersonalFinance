@@ -59,10 +59,11 @@ def cli( config ):
 @cli.command() 
 @click.option( '-gt', '--google-test', is_flag=True, default=False )
 @click.option( '-h', '--help', is_flag=True, default=False )
+@click.option( '-i', '--install-prefix' )
 @click.option( '-nw', '--no-warnings', is_flag=True, default=False )
 @click.option( '-vb', '--verbose-build', is_flag=True, default=False )
 @passConfig
-def configure( config, google_test, help, no_warnings, verbose_build ): 
+def configure( config, google_test, help, install_prefix, no_warnings, verbose_build ): 
   """
   Configure this project's build
   """  
@@ -82,6 +83,9 @@ def configure( config, google_test, help, no_warnings, verbose_build ):
 
   if verbose_build:
     lst.extend( [ '--verbose-build' ] )
+
+  if install_prefix is not None:
+    lst.extend( [ '--install-prefix', '{}'.format( install_prefix ) ] )
 
   cdToRoot( config )
   subprocess.call( lst )

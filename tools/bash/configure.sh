@@ -66,6 +66,11 @@ while [[ $# -gt 0 ]]; do
     exit 0
     ;;
 
+    -i|--install-prefix)
+    installPrefix=$2
+    shift
+    ;;
+
     -nw|--no-warnings)
     compilerWarnings="OFF"
     ;;

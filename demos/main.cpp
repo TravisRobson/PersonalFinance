@@ -7,12 +7,12 @@
 #include <sstream>
 #include <stdexcept>
 
-#include "Money.hpp"
+#include "personalFinance/config.hpp"
+#include "personalFinance/Money.hpp"
 
 
 using std::cout;
 using std::cerr;
-
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -46,7 +46,7 @@ void run( int argc, char* argv[] )
   cout << "Welcome!\n";
   parseCommandLineArgs( argc, argv );
 
-  Money m( 1.00 );
+  fin::Money m( 1.00 );
   std::cout << "Money--$" << m << "\n";
 
 }
@@ -84,6 +84,15 @@ void parseCommandLineArgs( int argc, char* argv[] )
         break;
 
       case 'n': // --no-gui
+        break;
+
+      case 'v': // --version
+
+        cout << "PersonalFinance version: v";
+        cout << PERSONALFINANCE_MAJOR_VERSION << ".";
+        cout << PERSONALFINANCE_MINOR_VERSION << ".";
+        cout << PERSONALFINANCE_PATCH_VERSION << "\n";
+        std::exit( 0 ); /// \todo is there a cleaner way to do this?
         break;
 
       case '?': // unrecognized options

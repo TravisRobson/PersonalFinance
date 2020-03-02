@@ -1,3 +1,8 @@
 
 
-#include "Loan.hpp"
+#include "personalFinance/Loan.hpp"
+
+namespace fin {
+
+  
+}

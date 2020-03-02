@@ -47,7 +47,7 @@ target_link_libraries(
   ${Pthread}
   finance
 )
-install( TARGETS MoneyTests RUNTIME DESTINATION ${INSTALL_BIN_DIR}/tests )
+install( TARGETS MoneyTests RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}/tests )
 
 
 add_executable( LoanTests LoanTests.cpp )
@@ -63,4 +63,6 @@ target_link_libraries(
   ${Pthread}
   finance
 )
-install( TARGETS LoanTests RUNTIME DESTINATION ${INSTALL_BIN_DIR}/tests )
+install( TARGETS LoanTests RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}/tests )
+
+

@@ -17,4 +17,4 @@ root="$(cd ${dir}/../../ && pwd)"
 cd ${root}
 
 
-rm -rf build lib bin include
+rm -rf build lib bin 

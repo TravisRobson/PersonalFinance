@@ -1,6 +1,6 @@
 
 /// \todo there is like a 95% chance that I made this class too convoluted
-#include "Money.hpp"
+#include "personalFinance/Money.hpp"
 
 #include <cmath>
 #include <iostream>
@@ -10,7 +10,7 @@
 using namespace std;
 
 
-namespace pfin {
+namespace fin {
 
 
 ///////////////////////////////////////////////////////////////////////////////

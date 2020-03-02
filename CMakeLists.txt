@@ -4,9 +4,6 @@ cmake_minimum_required( VERSION 3.8.0 FATAL_ERROR )
 project( finance VERSION 0.1.0 LANGUAGES CXX )
 
 
-set( CMAKE_CXX_STANDARD 11 )
-
-
 ###############################################################################
 # Versioning
 ###############################################################################
@@ -34,7 +31,7 @@ set( CMAKE_INSTALL_RPATH               "${CMAKE_INSTALL_PREFIX}/lib" )
 set( INSTALL_LIB_DIR     lib               CACHE PATH "Installation directory for libraries"    )
 set( INSTALL_BIN_DIR     bin               CACHE PATH "Installation directory for binaries"     )
 set( INSTALL_INCLUDE_DIR include           CACHE PATH "Installation directory for header files" )
-set( INSTALL_CMAKE_DIR   lib/cmake/finance CACHE PATH "Installation directory for CMake files"  )
+set( INSTALL_CMAKE_DIR   lib/CMake/finance CACHE PATH "Installation directory for CMake files"  )
 
 # Make relative paths absolute
 foreach( path LIB BIN INCLUDE CMAKE )
@@ -75,20 +72,20 @@ add_library(
   src/Loan.cpp
 )
 
+target_include_directories(
+  finance 
+  PUBLIC # the public header needs to be in a different location depending on whether we are building or installing
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+  PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+)
+
 set_target_properties(
   finance PROPERTIES
   SOVERSION     ${FINANCE_MAJOR_VERSION}
   VERSION       ${FINANCE_VERSION}
-  #PUBLIC_HEADER "Money.hpp;Loan.hpp"
-)
-
-target_include_directories(
-  finance 
-  PUBLIC
-    $<INSTALL_INTERFACE:include>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-  PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/src
+  POSITION_INDEPENDENT_CODE ON
 )
 
 # target_link_libraries( # currently none are linked
@@ -99,6 +96,7 @@ target_include_directories(
 #
 # )
 
+target_compile_features( finance PUBLIC cxx_std_11 ) 
 if ( COMPILER_WARNINGS )
 
   target_compile_options( 
@@ -109,6 +107,18 @@ if ( COMPILER_WARNINGS )
 
 endif()
 
+configure_file( 
+  "${PROJECT_SOURCE_DIR}/src/config.hpp.in"
+  "${PROJECT_BINARY_DIR}/include/personalFinance/config.hpp"
+  @ONLY 
+)
+
+message(STATUS ${CMAKE_INSTALL_INCLUDEDIR}/personalFinance )
+install( 
+  FILES "${PROJECT_BINARY_DIR}/include/personalFinance/config.hpp" 
+  DESTINATION ${INSTALL_INCLUDE_DIR}/personalFinance
+)
+
 
 ###############################################################################
 # External installation instruction
@@ -117,15 +127,13 @@ include( GNUInstallDirs ) # use GNU's standard installation directories
 install(
   TARGETS finance
   EXPORT finance-targets
-  RUNTIME       DESTINATION ${INSTALL_BIN_DIR} 
-  LIBRARY       DESTINATION ${INSTALL_LIB_DIR} 
-  ARCHIVE       DESTINATION ${INSTALL_LIB_DIR}
-  PUBLIC_HEADER DESTINATION ${INSTALL_INCLUDE_DIR}/personalFinance
+  LIBRARY  DESTINATION ${CMAKE_INSTALL_LIBDIR}  
+  ARCHIVE  DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
 
 set_target_properties( finance PROPERTIES EXPORT_NAME PersonalFinance )
 
-install( DIRECTORY include/ DESTINATION ${INSTALL_INCLUDE_DIR} ) # \todo or should I use: ${CMAKE_INSTALL_INCLUDEDIR}
+install( DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} )
 
 install( # export targets to a script
   EXPORT finance-targets 
@@ -134,27 +142,27 @@ install( # export targets to a script
   NAMESPACE
     PersonalFinance::
   DESTINATION
-    ${INSTALL_CMAKE_DIR} # \todo or should this be: ${CMAKE_INSTALL_LIBDIR}/cmake/personalFinance
+    ${INSTALL_CMAKE_DIR} 
 )
 
 
-include( CMakePackageConfigHelpers ) # create a PersonalFinanceConfigVersion.cmake
+include( CMakePackageConfigHelpers ) # create a ConfigVersion.cmake
 write_basic_package_version_file(
-  ${CMAKE_CURRENT_BINARY_DIR}/PersonaFinanceConfigVersion.cmake
+  ${CMAKE_CURRENT_BINARY_DIR}/PersonalFinanceConfigVersion.cmake
   VERSION ${FINANCE_VERSION}
   COMPATIBILITY AnyNewerVersion 
 )
 
-configure_package_config_file(
+configure_package_config_file( # create a Config.cmake file
   ${CMAKE_CURRENT_LIST_DIR}/cmake/PersonalFinanceConfig.cmake.in
   ${CMAKE_CURRENT_BINARY_DIR}/PersonalFinanceConfig.cmake
-  INSTALL_DESTINATION ${INSTALL_CMAKE_DIR} # \todo or should this be: ${CMAKE_INSTALL_LIBDIR}/cmake/personalFinance
+  INSTALL_DESTINATION ${INSTALL_CMAKE_DIR} 
 )
 
-install( FILES #install the config and configversion find modules
+install( FILES # install the config and configversion find modules
   ${CMAKE_CURRENT_BINARY_DIR}/PersonalFinanceConfig.cmake
-  ${CMAKE_CURRENT_BINARY_DIR}/PersonalFinanceConfigversion.cmake
-  DESTINATION ${INSTALL_CMAKE_DIR} # \todo or should this be: ${CMAKE_INSTALL_LIBDIR}/cmake/personalFinance
+  ${CMAKE_CURRENT_BINARY_DIR}/PersonalFinanceConfigVersion.cmake
+  DESTINATION ${INSTALL_CMAKE_DIR} 
 )
 
 
@@ -167,71 +175,6 @@ export(
 )
 
 export( PACKAGE PersonaFinance ) # register package in user's package registry
-
-
-# # export the targets of build tree
-# export( 
-#   TARGETS finance
-#   FILE "${PROJECT_BINARY_DIR}/FinanceTargets.cmake"
-# )
-
-
-# # export the package for use from the build tree
-# # registers the build tree with a global CMake registry
-# export( PACKAGE finance )
-
-
-# # Create FinanceConfig.cmake and FinanceConfigVersion.cmake
-# file(
-#   RELATIVE_PATH REL_INCLUDE_DIR 
-#   "${INSTALL_CMAKE_DIR}"
-#   "${INSTALL_INCLUDE_DIR}"
-# )
-
-
-# # ... for the build tree
-# set( CONF_INCLUDE_DIRS "${PROJECT_SOURCE_DIR}" "${PROJECT_BINARY_DIR}" )
-# configure_file(
-#   FinanceConfig.cmake.in
-#   "${PROJECT_BINARY_DIR}/FinanceConfig.cmake" @ONLY
-# )
-
-
-# # ... for the install tree
-# set( CONF_INCLUDE_DIRS "\${FINANCE_CMAKE_DIR}/${REL_INCLUDE_DIR}" )
-# configure_file(
-#   FinanceConfig.cmake.in
-#   "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/FinanceConfig.cmake" @ONLY
-# )
-
-
-# # ... for both
-# configure_file(
-#   FinanceConfigVersion.cmake.in
-#   "${PROJECT_BINARY_DIR}/FinanceConfigVersion.cmake" @ONLY
-# )
-
-
-# #
-# # Install the FinanceConfig.cmake and FinanceConfigVersion.cmake
-# #
-# install(
-#   FILES
-#   "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/FinanceConfig.cmake"
-#   "${PROJECT_BINARY_DIR}/FinanceConfigVersion.cmake"
-#   DESTINATION "${INSTALL_CMAKE_DIR}" 
-#   COMPONENT dev
-# )
-
-
-
-
-
-
-
-
-
-
 
 
 
