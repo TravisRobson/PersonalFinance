@@ -183,7 +183,6 @@ Money& Money::operator/=( const double divisor )
 {
 
   double cents   = cents_;
-  double dollars = dollars_;
 
   double amount  = dollars_ + cents / centsInDollar ;
 

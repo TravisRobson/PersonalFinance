@@ -49,3 +49,5 @@ configuration options by `Finance configure --help`.
 ## Personal Notes
 
 I need to fully digest this [reference](https://gitlab.kitware.com/cmake/community/-/wikis/doc/tutorials/How-to-create-a-ProjectConfig.cmake-file)
+
+* I would like to make include files C++98 compliant
