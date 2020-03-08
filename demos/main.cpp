@@ -2,13 +2,17 @@
 
 #include "main.hpp"
 
+#include <chrono>
 #include <cstdlib>
+#include <ctime>
+#include <iomanip>
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
 
 #include "personalFinance/config.hpp"
 #include "personalFinance/Money.hpp"
+#include "personalFinance/Date.hpp"
 
 
 using std::cout;
@@ -46,7 +50,52 @@ void run( int argc, char* argv[] )
   cout << "Welcome!\n";
   parseCommandLineArgs( argc, argv );
 
-  fin::Money m( 1.00 );
+  auto now   = std::chrono::system_clock::now();
+  fin::Date date = fin::Date( now );
+
+  std::cout << date << "\n";
+
+  fin::Money m( 10'642.79 );
+
+  int days = 1'000;
+
+  fin::Date payDate = fin::Date( fin::Month::March, 13, 2020 );
+
+  fin::Date ritLoanPaymentDate = fin::Date( fin::Month::March, 15, 2020 );
+  fin::Date dayIPayRitLoan     = fin::Date( fin::Month::April, 01, 2020 );
+
+  double dailyRate = 5.0 / 100 / 365 * m.toDouble(); /// \todo need logic for leap years?
+
+  for ( unsigned int i = 0; i < days; ++i )
+  {
+
+    m += dailyRate;
+
+    if ( date == payDate ) {
+      payDate += 14;
+    }
+
+    if ( date == ritLoanPaymentDate ) {
+      dailyRate = 5.0 / 100 / 365 * m.toDouble();
+      ritLoanPaymentDate += 31; // \todo make it actually a month
+    }
+
+    if ( date == dayIPayRitLoan ) {
+      m -= fin::Money( 500.00 );
+      dayIPayRitLoan += 31; // \todo make it actually a month
+    }
+
+    if ( m < fin::Money( 0.0 ) ) {
+      std::cout << "Loan paid off on " << date << "\n";
+      break;      
+    }
+
+
+    ++date;
+
+
+  }
+  
   std::cout << "Money--$" << m << "\n";
 
 }

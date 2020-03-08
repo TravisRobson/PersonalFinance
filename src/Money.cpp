@@ -169,10 +169,13 @@ Money& Money::operator-=( const Money& money )
 Money& Money::operator*=( const double multiplier )
 {
 
-  cents_   *= multiplier;
-  dollars_ *= multiplier;
+  double cents = cents_;
+  double dollars = dollars_;
 
-  rollOverCents();
+  cents   *= multiplier;
+  dollars *= multiplier;
+
+  *this = Money( dollars + cents / centsInDollar );
 
   return *this;
 
@@ -183,7 +186,6 @@ Money& Money::operator/=( const double divisor )
 {
 
   double cents   = cents_;
-  double dollars = dollars_;
 
   double amount  = dollars_ + cents / centsInDollar ;
 

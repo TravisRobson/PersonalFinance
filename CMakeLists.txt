@@ -45,11 +45,45 @@ endforeach()
 
 
 ###############################################################################
+# Point toward CMake modules
+###############################################################################
+list( APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake )
+
+
+###############################################################################
 # Google tests
 ###############################################################################
 if ( GOOGLE_TEST )
 
+  include( CTest )
   enable_testing()
+
+  # place tests in the build tree
+  set( GOOGLE_TEST_BINDIR ${CMAKE_BINARY_DIR}/bin/tests CACHE PATH "Installation directory for Google test executables" )
+  message( STATUS "${GOOGLE_TEST_BINDIR}" )
+  
+  include( ExternalProject )
+  set_directory_properties( PROPERTIES EP_PREFIX ${CMAKE_BINARY_DIR}/extern ) # Set default ExternalProject root directory
+  ExternalProject_Add( googletest
+    GIT_REPOSITORY     https://github.com/google/googletest.git
+    GIT_TAG            release-1.10.0 # there seems to be an issue with master
+    # Disable install step
+    INSTALL_COMMAND    ""
+    TIMEOUT            10
+    # force separate output paths for debug and release buils to allow easy
+    # identification of correct lib in subsequest TARGET_LINK_LIBRARIES commands
+    CMAKE_ARGS         -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+                       -DCMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG:PATH=DebugLibs
+                       -DCMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE:PATH=ReleaseLibs
+                       -Dgtest_force_shared_crt=ON
+    # Wrap download, configure, and build steps in a script to log output
+    LOG_DOWNLOAD       ON
+    LOG_CONFIGURE      ON
+    LOG_BUILD          ON
+  )
+  ExternalProject_Get_Property( googletest source_dir )
+  include_directories( ${source_dir}/googletest/include )
+
   add_subdirectory( tests )
 
 endif()
@@ -68,8 +102,9 @@ endif()
 ###############################################################################
 add_library(
   finance SHARED
-  src/Money.cpp
+  src/Date.cpp
   src/Loan.cpp
+  src/Money.cpp
 )
 
 target_include_directories(
@@ -83,6 +118,9 @@ target_include_directories(
 
 set_target_properties(
   finance PROPERTIES
+  CXX_STANDARD 17
+  CXX_STANDARD_REQUIRED YES
+  CXX_EXTENSIONS ON
   SOVERSION     ${FINANCE_MAJOR_VERSION}
   VERSION       ${FINANCE_VERSION}
   POSITION_INDEPENDENT_CODE ON
@@ -96,14 +134,13 @@ set_target_properties(
 #
 # )
 
-target_compile_features( finance PUBLIC cxx_std_11 ) 
 if ( COMPILER_WARNINGS )
 
   target_compile_options( 
     finance PRIVATE 
-    $<$<CXX_COMPILER_ID:GNU>:-Wall -Wextra>        # GCC compiler options
-    $<$<CXX_COMPILER_ID:AppleClang>:-Weverything>  # Clang compiler options
-  )
+    $<$<CXX_COMPILER_ID:GNU>:-Wall -Wextra>                          # GCC compiler options
+    $<$<CXX_COMPILER_ID:AppleClang>:-Weverything -Wno-c++98-compat>  # Clang compiler options
+  ) # \todo turn on C++98-compat later
 
 endif()
 
