@@ -44,6 +44,17 @@ TEST_F( MoneyTests, DoubleConstructorCorrect )
 }
 
 
+TEST_F( MoneyTests, FractionalMultiplier )
+{
+
+  m1_ = Money( 1.00 );
+  m1_ *= 0.5;
+
+  ASSERT_EQ( m1_, Money( 0.50 ) );
+
+}
+
+
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief check that equality operator works
 ///////////////////////////////////////////////////////////////////////////////

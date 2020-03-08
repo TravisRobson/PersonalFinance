@@ -102,8 +102,9 @@ endif()
 ###############################################################################
 add_library(
   finance SHARED
-  src/Money.cpp
+  src/Date.cpp
   src/Loan.cpp
+  src/Money.cpp
 )
 
 target_include_directories(
@@ -117,7 +118,7 @@ target_include_directories(
 
 set_target_properties(
   finance PROPERTIES
-  CXX_STANDARD 11
+  CXX_STANDARD 17
   CXX_STANDARD_REQUIRED YES
   CXX_EXTENSIONS ON
   SOVERSION     ${FINANCE_MAJOR_VERSION}
@@ -137,9 +138,9 @@ if ( COMPILER_WARNINGS )
 
   target_compile_options( 
     finance PRIVATE 
-    $<$<CXX_COMPILER_ID:GNU>:-Wall -Wextra>        # GCC compiler options
-    $<$<CXX_COMPILER_ID:AppleClang>:-Weverything>  # Clang compiler options
-  )
+    $<$<CXX_COMPILER_ID:GNU>:-Wall -Wextra>                          # GCC compiler options
+    $<$<CXX_COMPILER_ID:AppleClang>:-Weverything -Wno-c++98-compat>  # Clang compiler options
+  ) # \todo turn on C++98-compat later
 
 endif()
 

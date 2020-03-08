@@ -24,7 +24,7 @@ function( add_google_test TESTNAME )
   add_executable( ${TESTNAME} ${ARGV1} ) # extract first argument to get test source file
   set_target_properties(
     ${TESTNAME} PROPERTIES
-    CXX_STANDARD 11 # \todo standard should be propagated from top level
+    CXX_STANDARD 17 # \todo standard should be propagated from top level
     CXX_EXTENSIONS ON
     CXX_STANDARD_REQUIRED YES
     POSITION_INDEPENDENT_CODE ON
