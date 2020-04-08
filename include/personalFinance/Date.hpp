@@ -10,7 +10,7 @@
 #include <string>
 
 
-namespace fin {
+namespace yom {
 
 
 enum class Month {
@@ -35,22 +35,22 @@ std::map< Month, std::string > monthToString {
 };
 
 /// \todo I don't know if I want this, probably want to let time_point handle this operation...
-Month& operator++( Month& m ) {
-  switch( m ) {
-    case Month::January:   return m = Month::February;
-    case Month::February:  return m = Month::March;
-    case Month::March:     return m = Month::April;
-    case Month::April:     return m = Month::May;
-    case Month::May:       return m = Month::June;
-    case Month::June:      return m = Month::July;
-    case Month::July:      return m = Month::August;
-    case Month::August:    return m = Month::September;
-    case Month::September: return m = Month::October;
-    case Month::October:   return m = Month::November;
-    case Month::November:  return m = Month::December;
-    case Month::December:  return m = Month::January;
-  }
-}
+//Month& operator++( Month& m ) {
+//  switch( m ) {
+//    case Month::January:   return m = Month::February;
+//    case Month::February:  return m = Month::March;
+//    case Month::March:     return m = Month::April;
+//    case Month::April:     return m = Month::May;
+//    case Month::May:       return m = Month::June;
+//    case Month::June:      return m = Month::July;
+//    case Month::July:      return m = Month::August;
+//    case Month::August:    return m = Month::September;
+//    case Month::September: return m = Month::October;
+//    case Month::October:   return m = Month::November;
+//    case Month::November:  return m = Month::December;
+//    case Month::December:  return m = Month::January;
+//  }
+//}
 
 
 ///////////////////////////////////////////////////////////////////////////////

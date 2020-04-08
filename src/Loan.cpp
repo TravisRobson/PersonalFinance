@@ -2,7 +2,7 @@
 
 #include "personalFinance/Loan.hpp"
 
-namespace fin {
+namespace yom {
 
   
 }

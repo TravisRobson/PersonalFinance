@@ -90,6 +90,31 @@ endif()
 
 
 ###############################################################################
+# Qt 5
+###############################################################################
+# Turn on automatic invocation of the MOC, UIC & RCC
+# cmake_policy( SET CMP0071 NEW )
+# set( CMAKE_AUTOMOC ON )
+# set( CMAKE_AUTOUIC ON )
+# set( CMAKE_AUTORCC ON )
+# # set( CMAKE_INCLUDE_CURRENT_DIR ON )
+# find_package( Qt5 COMPONENTS REQUIRED  Widgets Core Gui )
+# 
+# qt5_wrap_ui( ui_wrap mainwindow.ui ) # wrap the ui file to a C++ header
+# qt5_wrap_cpp( moc_sources mainwindow.h )
+# 
+# add_executable( gui mainwindow.cpp main.cpp mainwindow.h ${ui_wrap} ${moc_sources} )
+# target_include_directories( gui PRIVATE ${CMAKE_BINARY_DIR} )
+# target_link_libraries( gui 
+#  PUBLIC
+#  Qt5::Core
+#  Qt5::Gui
+#  Qt5::Widgets
+# )
+
+
+
+###############################################################################
 # Doxygen
 ###############################################################################
 if ( GENERATE_DOXYGEN )
