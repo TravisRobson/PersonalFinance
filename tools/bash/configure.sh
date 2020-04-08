@@ -28,7 +28,7 @@ function usage()
   echo "configure.sh usage"
   echo "$ ./configure <options>"
   echo "--------------------------------------------------------------------------------"
-  echo "  -gt, --google-test       build Google tests"
+  echo "  -dg, --disable-gtest     disable Google tests"
   echo "  -h,  --help              display this usage message"
   echo "  -i,  --install-prefix    installation prefix"
   echo "  -nw, --no-warnings       build without compiler warnings"
@@ -43,7 +43,7 @@ function usage()
 # 
 buildType="Debug"
 installPrefix="${root}"
-googleTest="OFF"
+googleTest="ON"
 verboseBuild="OFF"
 compilerWarnings="ON"
 
@@ -57,8 +57,8 @@ while [[ $# -gt 0 ]]; do
   
   case $key in
 
-    -gt|--google-test)
-    googleTest="ON"
+    -dg|--disable-gest)
+    googleTest="OFF"
     ;;
 
     -h|--help)

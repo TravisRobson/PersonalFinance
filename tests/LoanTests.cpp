@@ -2,6 +2,8 @@
 
 #include "LoanTests.hpp"
 
-#include "gtest/gtest.h"
+TEST( LoanTests, Dummy )
+{
 
+}
 

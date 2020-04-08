@@ -51,18 +51,18 @@ void run( int argc, char* argv[] )
   parseCommandLineArgs( argc, argv );
 
   auto now   = std::chrono::system_clock::now();
-  fin::Date date = fin::Date( now );
+  yom::Date date = yom::Date( now );
 
   std::cout << date << "\n";
 
-  fin::Money m( 10'642.79 );
+  yom::Money m( 10'642.79 );
 
   int days = 1'000;
 
-  fin::Date payDate = fin::Date( fin::Month::March, 13, 2020 );
+  yom::Date payDate = yom::Date( yom::Month::March, 13, 2020 );
 
-  fin::Date ritLoanPaymentDate = fin::Date( fin::Month::March, 15, 2020 );
-  fin::Date dayIPayRitLoan     = fin::Date( fin::Month::April, 01, 2020 );
+  yom::Date ritLoanPaymentDate = yom::Date( yom::Month::March, 15, 2020 );
+  yom::Date dayIPayRitLoan     = yom::Date( yom::Month::April, 01, 2020 );
 
   double dailyRate = 5.0 / 100 / 365 * m.toDouble(); /// \todo need logic for leap years?
 
@@ -81,18 +81,16 @@ void run( int argc, char* argv[] )
     }
 
     if ( date == dayIPayRitLoan ) {
-      m -= fin::Money( 500.00 );
+      m -= yom::Money( 500.00 );
       dayIPayRitLoan += 31; // \todo make it actually a month
     }
 
-    if ( m < fin::Money( 0.0 ) ) {
+    if ( m < yom::Money( 0.0 ) ) {
       std::cout << "Loan paid off on " << date << "\n";
       break;      
     }
 
-
     ++date;
-
 
   }
   

@@ -9,7 +9,7 @@
 #include "gtest/gtest.h"
 
 
-using namespace fin;
+using namespace yom;
 
 
 TEST( DateTests, TodaysDate )
